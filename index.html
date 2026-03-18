@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TruthLens | Fake News Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Playfair+Display:wght@500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sql.js@1.13.0/dist/sql-wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  </head>
+  <body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <header class="ticker-wrap">
+      <div class="ticker-track">
+        <span>⚠ DEBUNKED: "Pope endorses Donald Trump" — rated FALSE by Snopes</span>
+        <span>⚠ MISLEADING: "5G towers cause COVID-19" — no scientific evidence</span>
+        <span>⚠ FALSE: "Drinking bleach cures coronavirus" — dangerous misinformation</span>
+        <span>⚠ DEBUNKED: "Election night ballot dumps prove fraud" — manipulated context</span>
+        <span>⚠ FALSE: "NASA confirms 15 days of darkness" — recurring hoax</span>
+        <span>⚠ MISLEADING: "Celebrity dead at 31" — recycled clickbait rumor</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="history-panel panel">
+        <div class="panel-head">
+          <h2>Case Archive</h2>
+          <p>Last 10 analyses stored locally</p>
+        </div>
+        <ul id="historyTimeline" class="history-timeline"></ul>
+        <button id="clearHistoryBtn" class="btn btn-ghost">Clear History</button>
+      </aside>
+
+      <section class="main-stage">
+        <div class="hero panel">
+          <div class="hero-title-wrap">
+            <img src="./assets/logo.svg" alt="TruthLens logo" class="logo" />
+            <div>
+              <h1>TruthLens</h1>
+              <p>Investigate claims. Track narrative spread. Score credibility.</p>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <label for="claimInput" class="sr-only">Headline or URL</label>
+            <textarea
+              id="claimInput"
+              placeholder="Paste a headline or full URL to investigate..."
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div id="previewCard" class="preview-card hidden"></div>
+
+          <div class="action-row">
+            <button id="analyzeBtn" class="btn btn-primary">Analyze</button>
+            <button id="demoBtn" class="btn btn-secondary">Demo Mode</button>
+          </div>
+        </div>
+
+        <section id="resultsSection" class="results hidden">
+          <div class="results-grid">
+            <article class="panel score-panel result-block" data-stagger="0">
+              <h3>Credibility Index</h3>
+              <div class="gauge-wrap">
+                <svg id="scoreGauge" viewBox="0 0 220 220" role="img" aria-label="Credibility score gauge">
+                  <circle class="gauge-bg" cx="110" cy="110" r="82"></circle>
+                  <circle id="gaugeArc" class="gauge-arc" cx="110" cy="110" r="82"></circle>
+                </svg>
+                <div class="score-readout">
+                  <div id="scoreValue" class="score-value">0</div>
+                  <div id="scoreLabel" class="score-label">SCANNING</div>
+                </div>
+              </div>
+              <div id="dataConfidenceTag" class="data-tag">DATA CONFIDENCE: LIVE DATA</div>
+              <ul id="scoreBreakdown" class="score-breakdown"></ul>
+            </article>
+
+            <article class="panel fact-panel result-block" data-stagger="120">
+              <div class="panel-head">
+                <h3>Fact-Check Matches</h3>
+              </div>
+              <div id="factPanel" class="fact-list"></div>
+            </article>
+          </div>
+
+          <article class="panel graph-panel result-block" data-stagger="240">
+            <div class="panel-head">
+              <h3>Source Spread Map</h3>
+              <p id="spreadMeta">No sources mapped yet.</p>
+              <p id="apiMeta">NewsAPI: 0 | Google Fact Check: 0</p>
+            </div>
+            <div id="graphContainer" class="graph-container"></div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <div id="toastHost" class="toast-host" aria-live="polite"></div>
+
+    <script src="./config.js"></script>
+    <script src="./db.js"></script>
+    <script src="./graph.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
